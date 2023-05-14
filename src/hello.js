@@ -5,7 +5,7 @@ const hello = async (event) => {
     statusCode: 200,
     body: JSON.stringify(
       {
-        message: "Hello From Serverless!",
+        message: "Hello From Batch 3!",
       },
       null,
       2
