@@ -157,7 +157,7 @@ Outputs:
   
   kaamBharoFunctionArn:
     Description: "ARN of the kaamBharoFunctionArn Lambda function"
-    Value: !GetAtt kaamBharoFunctionArn.Arn
+    Value: !GetAtt kaamBharoFunction.Arn
 
   kaamDikhaoFunctionArn:
     Description: "ARN of the kaamDikhaoFunction Lambda function"
