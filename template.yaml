@@ -49,7 +49,7 @@ Resources:
   kaamBharoFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: src/
+      CodeUri: src/kaamBharo.handler
       Handler: kaamBharo.handler
       Runtime: nodejs16.x
       Architectures:
@@ -79,7 +79,7 @@ Resources:
   kaamDikhaoFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: src/
+      CodeUri: src/kaamDikhao.handler
       Handler: kaamDikhao.handler
       Runtime: nodejs16.x
       Architectures:
@@ -109,7 +109,7 @@ Resources:
   kaamKhatamKaroFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: src/
+      CodeUri: src/kaamKhatamKaro.handler
       Handler: kaamKhatamKaro.handler
       Runtime: nodejs16.x
       Architectures:
