@@ -1,0 +1,207 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'serverless-app
+
+  transforming serverless to sam-app
+
+  '
+Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: '''OPTIONS, POST, PUT, GET'''
+        AllowHeaders: '''Content-Type'''
+        AllowOrigin: '''*'''
+  HelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/hello.handler
+      Runtime: nodejs16.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get all items by
+        id from a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: KaamKaro
+      Environment:
+        Variables:
+          SAMPLE_TABLE:
+            Ref: KaamKaro
+          ENDPOINT_OVERRIDE: ''
+      Events:
+        ApiHello:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+            RestApiId:
+              Ref: ApiGatewayApi
+      CodeUri: HelloFunction
+    Metadata:
+      SamResourceId: HelloFunction
+  kaamBharoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/kaamBharo.handler
+      Runtime: nodejs16.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get all items by
+        id from a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: KaamKaro
+      Environment:
+        Variables:
+          SAMPLE_TABLE:
+            Ref: KaamKaro
+          ENDPOINT_OVERRIDE: ''
+      Events:
+        ApikaamBharo:
+          Type: Api
+          Properties:
+            Path: /kaam
+            Method: POST
+            RestApiId:
+              Ref: ApiGatewayApi
+      CodeUri: kaamBharoFunction
+    Metadata:
+      SamResourceId: kaamBharoFunction
+  kaamDikhaoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/kaamDikhao.handler
+      Runtime: nodejs16.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get all items by
+        id from a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: KaamKaro
+      Environment:
+        Variables:
+          SAMPLE_TABLE:
+            Ref: KaamKaro
+          ENDPOINT_OVERRIDE: ''
+      Events:
+        ApikaamDikhao:
+          Type: Api
+          Properties:
+            Path: /kaam
+            Method: GET
+            RestApiId:
+              Ref: ApiGatewayApi
+      CodeUri: kaamDikhaoFunction
+    Metadata:
+      SamResourceId: kaamDikhaoFunction
+  kaamKhatamKaroFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/kaamKhatamKaro.handler
+      Runtime: nodejs16.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get all items by
+        id from a DynamoDB table.
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: KaamKaro
+      Environment:
+        Variables:
+          SAMPLE_TABLE:
+            Ref: KaamKaro
+          ENDPOINT_OVERRIDE: ''
+      Events:
+        ApikaamKhatamKaro:
+          Type: Api
+          Properties:
+            Path: /kaam/{id}
+            Method: PUT
+            RestApiId:
+              Ref: ApiGatewayApi
+      CodeUri: kaamKhatamKaroFunction
+    Metadata:
+      SamResourceId: kaamKhatamKaroFunction
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+      - PolicyName: LambdaPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - dynamodb:*
+            Resource:
+            - arn:aws:dynamodb:us-east-1:251620460948:table/newstack-16-KaamKaro-5ICF5OP6Z2PD
+  KaamKaro:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+Outputs:
+  ApiGatewayInvokeURL:
+    Description: URL to invoke the API Gateway
+    Value:
+      Fn::Sub: https://${ApiGatewayApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+  HelloFunctionArn:
+    Description: ARN of the HelloFunction Lambda function
+    Value:
+      Fn::GetAtt:
+      - HelloFunction
+      - Arn
+  kaamBharoFunctionArn:
+    Description: ARN of the kaamBharoFunctionArn Lambda function
+    Value:
+      Fn::GetAtt:
+      - kaamBharoFunction
+      - Arn
+  kaamDikhaoFunctionArn:
+    Description: ARN of the kaamDikhaoFunction Lambda function
+    Value:
+      Fn::GetAtt:
+      - kaamDikhaoFunction
+      - Arn
+  kaamKhatamKaroFunctionArn:
+    Description: ARN of the kaamKhatamKaroFunction Lambda function
+    Value:
+      Fn::GetAtt:
+      - kaamKhatamKaroFunction
+      - Arn
+  KaamKaroTableArn:
+    Description: ARN of the KaamKaro DynamoDB table
+    Value:
+      Fn::GetAtt:
+      - KaamKaro
+      - Arn
